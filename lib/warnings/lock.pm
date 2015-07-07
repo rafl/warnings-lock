@@ -21,4 +21,8 @@ sub import {
     cast ${^WARNING_BITS} => $wiz;
 }
 
+sub unimport {
+    delete $^H{$hints_key};
+}
+
 1;
