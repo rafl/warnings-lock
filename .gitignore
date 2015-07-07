@@ -1,0 +1,8 @@
+.*
+!.gitignore
+LICENSE
+Makefile*
+README*
+cpanfile*
+perl*rc
+tidy*
