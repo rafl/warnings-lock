@@ -5,24 +5,22 @@ use Test::Warnings ':all';
 
 {
     use warnings;
-    use feature 'postderef';
-    no warnings 'experimental::postderef';
+    no warnings 'illegalproto';
     use warnings::lock;
 
     use warnings;
 
-    is_deeply warning { eval 'sub { () = []->@* }' }, [];
+    is_deeply warning { eval 'sub ($foo) { }' }, [];
 }
 
 {
     use warnings;
-    use feature 'postderef';
-    use warnings::lock;
+    no warnings 'illegalproto';
 
     use warnings;
 
-    like warning { eval 'sub { () = []->@* }' },
-        qr/^Postfix dereference is experimental/;
+    like warning { eval 'sub ($foo) {  }' },
+        qr/^Illegal character in prototype /;
 }
 
 done_testing;
