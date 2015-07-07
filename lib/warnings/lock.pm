@@ -2,6 +2,9 @@ use strict;
 use warnings;
 
 package warnings::lock;
+# ABSTRACT: lock warnings
+
+our $VERSION = '1';
 
 use Variable::Magic 'wizard', 'cast';
 
