@@ -122,6 +122,24 @@ while only preventing modifications from other imports. Please get in touch!
     * L<feature>
     * L<experimental>
 
+=head1 IMPLEMENTATION
+
+This module is using L<Variable::Magic> to cast C<MAGIC> onto the special
+C<${^WARNING_BITS}> global variable. After importing the module, every write to
+C<${^WARNING_BITS}> will result in its value being immediately overwritten by
+the value it had during import of this module.
+
+A number of different ways of implementing this module have been explored by the
+authors, but we eventually settled on the above as it seems to be the most
+robust implementation we could come up with without having to resort to writing
+C code, using C<tie>, customizing C<CORE::GLOBAL::require>, or overriding
+foreign module's C<import> method.
+
+If you think you know a better way, or if you've discovered a bug or limitation
+caused by the current implementation, please let us know! We'll be happy to
+consider better alternatives as long as backwards compatibility can be largely
+preserved.
+
 =cut
 
 my $hints_key = __PACKAGE__ . '/desired_warning_bits';
