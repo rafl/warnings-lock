@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 package warnings::lock;
-# ABSTRACT: lock down the set of warnings used in a lexical scope
+# ABSTRACT: Lock down the set of warnings active in a lexical scope
 
 our $VERSION = '1';
 
@@ -18,46 +18,84 @@ use Variable::Magic 'wizard', 'cast';
     # Lock warnings into their current state
     use warnings::lock;
 
-    # Import additional modules which try to fiddle with our warning bits
+    # Import additional modules which might attempt to change our warnings
+    # configuration
     use Moose;
+    ...
 
     # Use of signatures feature will not warn
     sub greeting ($name) { print "Hello $name!" }
 
 =head1 DESCRIPTION
 
-Lock down the set of warnings used in a lexical scope
+This module allows you to lock down the set of warnings active within a lexical
+scope. This is useful to protect yourself from other modules you C<use>
+overwriting the warnings configuration you set up.
 
-=head1 MOTIVATION
+=head1 PROBLEM
 
-=head2 Background
+Perl's L<warnings> are really useful. It's generally a good idea to turn them on
+with C<use warnings>.
 
-Generally, we want warnings enabled. So, it seems like a good idea to C<use
-warnings>.
+However, sometimes you might have a good reason to turn off specific warnings
+which C<use warnings> enabled. One common example is to disable warnings for
+experimental features: C<no warning 'experimental::signatures'>.
 
-However, in some cases, we want to turn particular warnings off. So, we might
-say something like: C<no warnings 'experimental::signatures'>.
+For better or worse, it has become rather popular for certain kinds of CPAN
+modules to try to ensure that their users have warnings enabled. While well
+intentioned, this sometimes has unintended consequences.
 
-But, if we later use a module like Foo which not only uses warnings, but (re)
-imports them, they'll be turned back on.
+If you import one of those modules, such as L<Moose>, after setting up your
+warnings as described above, the warnings configuration will be reverted back to
+perl's default set of warnings, even though you explicitly asked for certain
+default warnings to be disabled.
 
-=head2 Solution + Problem
+This is unfortunate.
 
-We could just switch the order and use Foo before we turn off a particular warning.
+=head1 WORKAROUND
 
-But what if we need the 'no warnings' to come first? Maybe the 'no warnings' is
-part of site-wide pragma which loads various safety measures?
+The problem can be worked around by paying close attention to the order of
+imports in your code and ensuring that your personal warnings configuration is
+only applied B<after> any other modules which might change warnings are
+imported.
 
-We could write a second site-wide pragma to put everything back the way we want
-it. But, ideally, we could lock our warnings against change by other modules.
+Unfortunately there are drawbacks to that approach. Moving your configuration to
+after all your imports might cause more of your code to run without the warnings
+you wanted enabled. This is made worse by the common practise of many
+organizations to use site-specific pragmas to define their perl language
+preferences such as strictures, warnings, features, syntax extensions, safety
+measures, and so on. In that scenario it's even more important to apply that
+configuration early.
 
-warnings::lock gives you this option.
+=head1 SOLUTION
 
-=head1 ADVANCED USAGE
+Instead of making our warnings changes as late as possible to ensure nothing
+else will accidentally overwrite them, it would be nice to just set up warnings
+just the way we want them to be and then lock them into place, preventing any
+other modules from making modifications to them.
 
-If you want to change the settings inside a particular code block, you can just
-issue a C<no warnings::lock> and then disable (or enable) those particular
-warnings.
+This is what C<warnings::lock> provides. It's especially handy when used as part
+of a site-wide pragma setting up warnings and other language preferences, in
+which case the user of the pragma doesn't usually have to be aware of
+C<warnings::lock> being used.
+
+=head1 UNLOCKING WARNINGS
+
+The only case the users of your site-wide pragma might have to be aware of
+C<warnings::lock>'s existence is when they need to temporarily disable certain
+warnings for a new lexical scope.
+
+With C<warnings::lock> in effect, even the L<warnings> module itself won't be
+able to change warnings, and so the following idiom won't do what you'd expect:
+
+    {
+        no warnings 'recursion';
+        ...
+    }
+
+Within that block, C<recursion> warnings would still be enabled. The current
+solution is to disable warning locking within that same scope before turning off
+additional warnings:
 
     {
         no warnings::lock;
@@ -69,6 +107,13 @@ warnings.
 
     # deep recursion warnings enabled again after the block
     ...
+
+This isn't great, but seems a lot less error-prone than trusting to never get
+the import order wrong anywhere. If you think this is terrible, the authors
+would love to talk to you about how to improve things. Options include raising a
+warning or an exception when L<warnings> is used directly within a lexical scope
+affected by L<warnings::lock> or always permitting direct L<warnings> usage
+while only preventing modifications from other imports. Please get in touch!
 
 =head1 SEE ALSO
 

@@ -1,5 +1,6 @@
 .*
 !.gitignore
+!.stopwords
 LICENSE
 Makefile*
 README*
