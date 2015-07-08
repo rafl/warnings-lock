@@ -112,8 +112,9 @@ This isn't great, but seems a lot less error-prone than trusting to never get
 the import order wrong anywhere. If you think this is terrible, the authors
 would love to talk to you about how to improve things. Options include raising a
 warning or an exception when L<warnings> is used directly within a lexical scope
-affected by L<warnings::lock> or always permitting direct L<warnings> usage
-while only preventing modifications from other imports. Please get in touch!
+affected by L<warnings::lock>, always permitting direct L<warnings> usage while
+only preventing modifications from other imports, or supporting something along
+the lines of C<no warnings::lock 'recursion'>. Please get in touch!
 
 =head1 SEE ALSO
 
