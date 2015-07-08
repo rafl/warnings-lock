@@ -62,7 +62,7 @@ imported.
 Unfortunately there are drawbacks to that approach. Moving your configuration to
 after all your imports might cause more of your code to run without the warnings
 you wanted enabled. This is made worse by the common practise of many
-organizations to use site-specific pragmas to define their perl language
+organizations to use site-specific pragmas to define their Perl language
 preferences such as strictures, warnings, features, syntax extensions, safety
 measures, and so on. In that scenario it's even more important to apply that
 configuration early.
