@@ -75,6 +75,7 @@ warnings.
 =for :list
     * L<warnings>
     * L<feature>
+    * L<experimental>
 
 =cut
 
