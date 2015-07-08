@@ -39,7 +39,7 @@ with C<use warnings>.
 
 However, sometimes you might have a good reason to turn off specific warnings
 which C<use warnings> enabled. One common example is to disable warnings for
-experimental features: C<no warning 'experimental::signatures'>.
+experimental features: C<no warnings 'experimental::signatures'>.
 
 For better or worse, it has become rather popular for certain kinds of CPAN
 modules to try to ensure that their users have warnings enabled. While well
