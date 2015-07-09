@@ -71,13 +71,14 @@ configuration early.
 
 Instead of making our warnings changes as late as possible to ensure nothing
 else will accidentally overwrite them, it would be nice to just set up warnings
-just the way we want them to be and then lock them into place, preventing any
+exactly the way we want them to be and then lock them into place, preventing any
 other modules from making modifications to them.
 
-This is what C<warnings::lock> provides. It's especially handy when used as part
-of a site-wide pragma setting up warnings and other language preferences, in
-which case the user of the pragma doesn't usually have to be aware of
-C<warnings::lock> being used.
+This is what C<warnings::lock> provides.
+
+It's especially handy when used as part of a site-wide pragma setting up
+warnings and other language preferences, in which case the user of the pragma
+doesn't usually have to be aware of C<warnings::lock> being used.
 
 =head1 UNLOCKING WARNINGS
 
