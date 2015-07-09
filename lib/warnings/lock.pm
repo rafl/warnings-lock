@@ -152,7 +152,6 @@ my $wiz = wizard set => sub {
 };
 
 sub import {
-    $^H |= 0x20000;
     $^H{$hints_key} = ${^WARNING_BITS};
     cast ${^WARNING_BITS} => $wiz;
 }
