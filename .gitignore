@@ -3,7 +3,6 @@
 !.stopwords
 LICENSE
 Makefile*
-README*
 cpanfile*
 perl*rc
 tidy*
