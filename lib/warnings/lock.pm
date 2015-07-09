@@ -4,7 +4,7 @@ use warnings;
 package warnings::lock;
 # ABSTRACT: Lock down the set of warnings active in a lexical scope
 
-our $VERSION = '1';
+our $VERSION = '2';
 
 use Variable::Magic 'wizard', 'cast';
 
